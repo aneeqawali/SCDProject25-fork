@@ -15,6 +15,7 @@ function menu() {
 3. Update Record
 4. Delete Record
 5. Exit
+6. Search Records
 =====================
   `);
 
@@ -61,6 +62,28 @@ function menu() {
         console.log('👋 Exiting NodeVault...');
         rl.close();
         break;
+
+      case '6':
+        rl.question('Enter search keyword (Name or ID): ', keywordInput => {
+        const keyword = keywordInput.toLowerCase();
+        const records = db.listRecords(); // get current records
+        const matches = records.filter(r =>
+            r.name.toLowerCase().includes(keyword) || r.id.toString() === keyword
+        );
+
+        if (matches.length > 0) {
+            console.log(`Found ${matches.length} matching records:`);
+            matches.forEach(r => {
+                console.log(`ID: ${r.id} | Name: ${r.name} | Value: ${r.value}`);
+            });
+        } else {
+            console.log("No records found.");
+        }
+
+        menu(); // show menu again
+        });
+        break;
+
 
       default:
         console.log('Invalid option.');
