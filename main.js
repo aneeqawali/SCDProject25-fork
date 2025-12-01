@@ -16,6 +16,7 @@ function menu() {
 4. Delete Record
 5. Exit
 6. Search Records
+7. Sort Records
 =====================
   `);
 
@@ -80,10 +81,36 @@ function menu() {
             console.log("No records found.");
         }
 
-        menu(); // show menu again
+        menu(); 
         });
         break;
 
+    case '7': 
+    rl.question('Sort by field (Name/Created): ', fieldInput => {
+        const field = fieldInput.toLowerCase();
+        rl.question('Order (Ascending/Descending): ', orderInput => {
+            const order = orderInput.toLowerCase();
+            const records = db.listRecords();
+
+            let sorted = [...records];
+            if (field === 'name') {
+                sorted.sort((a, b) => a.name.localeCompare(b.name));
+            } else if (field === 'created') {
+                sorted.sort((a, b) => new Date(a.created) - new Date(b.created));
+            } else {
+                console.log('Invalid field.');
+                return menu();
+            }
+
+            if (order === 'descending') sorted.reverse();
+
+            console.log('Sorted Records:');
+            sorted.forEach(r => console.log(`ID: ${r.id} | Name: ${r.name} | Created: ${r.created}`));
+
+            menu(); 
+        });
+    });
+    break;
 
       default:
         console.log('Invalid option.');
