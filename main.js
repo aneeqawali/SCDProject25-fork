@@ -1,3 +1,5 @@
+const fs = require('fs');
+const path = require('path');
 const readline = require('readline');
 const db = require('./db');
 require('./events/logger'); // Initialize event logger
@@ -6,7 +8,16 @@ const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
 });
-
+function createBackup(records) {
+    const backupDir = path.join(__dirname, 'backups');
+    if (!fs.existsSync(backupDir)) {
+        fs.mkdirSync(backupDir);
+    }
+    const timestamp = new Date().toISOString().replace(/[:]/g, '-'); // safe for filenames
+    const backupFile = path.join(backupDir, `backup_${timestamp}.json`);
+    fs.writeFileSync(backupFile, JSON.stringify(records, null, 2));
+    console.log(`🗄️ Backup created: ${backupFile}`);
+}
 function menu() {
   console.log(`
 ===== NodeVault =====
@@ -28,6 +39,7 @@ function menu() {
           rl.question('Enter value: ', value => {
             db.addRecord({ name, value });
             console.log('✅ Record added successfully!');
+            createBackup(db.listRecords());
             menu();
           });
         });
@@ -56,6 +68,7 @@ function menu() {
         rl.question('Enter record ID to delete: ', id => {
           const deleted = db.deleteRecord(Number(id));
           console.log(deleted ? '🗑️ Record deleted!' : '❌ Record not found.');
+          if (deleted) createBackup(db.listRecords());
           menu();
         });
         break;
