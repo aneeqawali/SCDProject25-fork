@@ -29,6 +29,7 @@ function menu() {
 6. Search Records
 7. Sort Records
 8. Export Data
+9. View Vault Statistics
 =====================
   `);
 
@@ -150,6 +151,46 @@ File: ${fileName}
         console.log(`✅ Data exported successfully to ${fileName}`);
         menu();
         break;
+    case '9': 
+    const statsRecords = db.listRecords();
+    if (statsRecords.length === 0) {
+        console.log("No records found.");
+        return menu();
+    }
+
+    const validDates = statsRecords
+        .map(r => new Date(r.created))
+        .filter(d => !isNaN(d));
+
+    const totalRecords = statsRecords.length;
+
+    const lastModified = statsRecords
+        .map(r => new Date(r.updated || r.created))
+        .filter(d => !isNaN(d))
+        .sort((a, b) => b - a)[0];
+
+    
+    const longestNameRecord = statsRecords.reduce(
+        (max, r) => r.name.length > max.name.length ? r : max,
+        statsRecords[0]
+    );
+
+    
+    const earliest = validDates.sort((a, b) => a - b)[0];
+    const latest = validDates.sort((a, b) => a - b)[validDates.length - 1];
+
+    console.log(`
+Vault Statistics:
+--------------------------
+Total Records: ${totalRecords}
+Last Modified: ${lastModified ? lastModified.toISOString() : "N/A"}
+Longest Name: ${longestNameRecord.name} (${longestNameRecord.name.length} characters)
+Earliest Record: ${earliest ? earliest.toISOString().split('T')[0] : "N/A"}
+Latest Record: ${latest ? latest.toISOString().split('T')[0] : "N/A"}
+    `);
+
+    menu();
+    break;
 
       default:
         console.log('Invalid option.');
