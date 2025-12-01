@@ -1,0 +1,9 @@
+===== Vault Export =====
+Date/Time: 2025-12-01T10:35:50.583Z
+Total Records: 3
+File: export.txt
+=========================
+
+ID: 692d6eff46c4ac1f1336dc61 | Name: Ali Raza | Value: 100 | Created: Mon Dec 01 2025 15:33:35 GMT+0500 (Pakistan Standard Time)
+ID: 692d6f0a46c4ac1f1336dc62 | Name: Aneeqa Wali  | Value: 200 | Created: Mon Dec 01 2025 15:33:46 GMT+0500 (Pakistan Standard Time)
+ID: 692d6f1646c4ac1f1336dc63 | Name: Hammad Khan | Value: 300 | Created: Mon Dec 01 2025 15:33:58 GMT+0500 (Pakistan Standard Time)
