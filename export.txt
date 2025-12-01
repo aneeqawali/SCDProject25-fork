@@ -1,0 +1,9 @@
+===== Vault Export =====
+Date/Time: 2025-12-01T08:37:33.428Z
+Total Records: 3
+File: export.txt
+=========================
+
+ID: 1764577441936 | Name: Ali Raza | Value: 100 | Created: undefined
+ID: 1764577454094 | Name: Bilal Ahmed | Value: 200 | Created: undefined
+ID: 1764577462257 | Name: Zain Khan | Value: 300 | Created: undefined

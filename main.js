@@ -17,6 +17,7 @@ function menu() {
 5. Exit
 6. Search Records
 7. Sort Records
+8. Export Data
 =====================
   `);
 
@@ -86,7 +87,7 @@ function menu() {
         break;
 
     case '7': 
-    rl.question('Sort by field (Name/Created): ', fieldInput => {
+        rl.question('Sort by field (Name/Created): ', fieldInput => {
         const field = fieldInput.toLowerCase();
         rl.question('Order (Ascending/Descending): ', orderInput => {
             const order = orderInput.toLowerCase();
@@ -108,9 +109,34 @@ function menu() {
             sorted.forEach(r => console.log(`ID: ${r.id} | Name: ${r.name} | Created: ${r.created}`));
 
             menu(); 
+            });
         });
-    });
-    break;
+        break;
+    case '8': // Export Data
+        const recordsToExport = db.listRecords();
+        if (recordsToExport.length === 0) {
+        console.log("No records to export.");
+        return menu();
+        }
+
+        const fs = require('fs');
+        const fileName = 'export.txt';
+        const now = new Date().toISOString();
+
+        let content = `===== Vault Export =====
+Date/Time: ${now}
+Total Records: ${recordsToExport.length}
+File: ${fileName}
+=========================\n\n`;
+
+        recordsToExport.forEach(r => {
+        content += `ID: ${r.id} | Name: ${r.name} | Value: ${r.value} | Created: ${r.created}\n`;
+        });
+
+        fs.writeFileSync(fileName, content);
+        console.log(`✅ Data exported successfully to ${fileName}`);
+        menu();
+        break;
 
       default:
         console.log('Invalid option.');
